@@ -1,0 +1,6 @@
+{
+  "name": "NJ STUDIO",
+  "description": "A Little Space for Every Story — An interactive 3D publishing studio and bookstore for creative journals, mystery adventures, faith-inspired activities, and original stories.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
