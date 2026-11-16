@@ -361,7 +361,7 @@ export const BagDrawer: React.FC<BagDrawerProps> = ({
                 Estimated Selection Total
               </span>
               <span className="font-serif text-2xl font-semibold text-[#203B30] tabular-nums">
-                ${estimatedTotal.toFixed(2)}
+                ₹{estimatedTotal.toLocaleString('en-IN')}
               </span>
             </div>
             <p className="text-[11px] text-[#765A4A] leading-relaxed">
@@ -440,8 +440,35 @@ export const FooterInfoModal: React.FC<FooterInfoModalProps> = ({
           {modalType === 'support' && (
             <>
               <p>
-                Need help accessing a digital PDF edition or locating a physical copy? Reach our publishing desk at{' '}
-                <span className="font-semibold text-[#203B30]">hello@njstudio.publishing</span>.
+                Need help accessing a digital PDF edition, locating a physical copy, or sending an enquiry? Reach our publishing desk at{' '}
+                <a
+                  href="mailto:njstudio333@gmail.com"
+                  className="font-semibold text-[#203B30] underline underline-offset-4"
+                >
+                  njstudio333@gmail.com
+                </a>
+                .
+              </p>
+              <p>
+                You can also submit a message or request directly through our{' '}
+                <a
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSfX7uOA-AFgEJiuG76SS2PsKqQVHlGCGU4b4eZnRAO82p6R2g/viewform?usp=dialog"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-[#203B30] underline underline-offset-4"
+                >
+                  NJ STUDIO Google Form
+                </a>{' '}
+                or connect with us on Instagram{' '}
+                <a
+                  href="https://www.instagram.com/nj_studio_333?xtok=MWJ1NjVqbmM1bHRtZw=="
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-[#203B30] underline underline-offset-4"
+                >
+                  @nj_studio_333
+                </a>
+                .
               </p>
               <p>
                 For physical shipping updates or returns, please contact the retail partner listed on your order confirmation.

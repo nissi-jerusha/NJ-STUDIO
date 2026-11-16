@@ -41,12 +41,12 @@ export const Footer: React.FC<FooterProps> = ({
             </p>
             <div className="mt-5 flex items-center gap-4 text-xs">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/nj_studio_333?xtok=MWJ1NjVqbmM1bHRtZw=="
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#F8F4EF]/85 hover:text-[#E7C2C0] underline underline-offset-4 transition-colors"
               >
-                Instagram
+                Instagram (@nj_studio_333)
               </a>
               <span aria-hidden="true" className="text-[#F8F4EF]/30">·</span>
               <a
@@ -125,10 +125,31 @@ export const Footer: React.FC<FooterProps> = ({
               <p>
                 Editorial & Reader Enquiries:{' '}
                 <a
-                  href="mailto:hello@njstudio.publishing"
+                  href="mailto:njstudio333@gmail.com"
                   className="underline underline-offset-4 hover:text-[#E7C2C0]"
                 >
-                  hello@njstudio.publishing
+                  njstudio333@gmail.com
+                </a>
+              </p>
+              <p>
+                Instagram:{' '}
+                <a
+                  href="https://www.instagram.com/nj_studio_333?xtok=MWJ1NjVqbmM1bHRtZw=="
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-4 hover:text-[#E7C2C0]"
+                >
+                  @nj_studio_333
+                </a>
+              </p>
+              <p>
+                <a
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSfX7uOA-AFgEJiuG76SS2PsKqQVHlGCGU4b4eZnRAO82p6R2g/viewform?usp=dialog"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 underline underline-offset-4 text-[#E7C2C0] hover:text-[#F8F4EF]"
+                >
+                  Open Reader & Enquiry Form →
                 </a>
               </p>
               <p className="text-[#F8F4EF]/70">

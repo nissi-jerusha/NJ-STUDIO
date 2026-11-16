@@ -123,6 +123,35 @@ export const AboutAndNewsletter: React.FC = () => {
               {errorMsg}
             </p>
           )}
+
+          <p className="mt-4 text-xs text-[#765A4A]">
+            Prefer to reach us directly?{' '}
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSfX7uOA-AFgEJiuG76SS2PsKqQVHlGCGU4b4eZnRAO82p6R2g/viewform?usp=dialog"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-[#203B30] underline underline-offset-4 hover:text-[#765A4A]"
+            >
+              Submit our Google Form
+            </a>{' '}
+            or email{' '}
+            <a
+              href="mailto:njstudio333@gmail.com"
+              className="font-medium text-[#203B30] underline underline-offset-4 hover:text-[#765A4A]"
+            >
+              njstudio333@gmail.com
+            </a>
+            , or follow{' '}
+            <a
+              href="https://www.instagram.com/nj_studio_333?xtok=MWJ1NjVqbmM1bHRtZw=="
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-[#203B30] underline underline-offset-4 hover:text-[#765A4A]"
+            >
+              @nj_studio_333 on Instagram
+            </a>
+            .
+          </p>
         </div>
       </section>
     </>

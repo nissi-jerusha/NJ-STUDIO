@@ -10,7 +10,8 @@ export type ProceduralObjectType =
   | 'noahs-ark'
   | 'botanical-lantern'
   | 'prayer-chalice'
-  | 'origami-crane';
+  | 'origami-crane'
+  | 'royal-harp';
 
 export interface CategoryBranchItem {
   id: string;
@@ -77,6 +78,8 @@ export interface BookDigitalEdition {
   marketplaceLabel: string;
   purchaseUrl: string;
   sampleNote: string;
+  /** Optional path to a real PDF sample/edition inside /public/assets/... */
+  samplePdfUrl?: string;
 }
 
 export interface BookCoverTheme {
@@ -90,6 +93,13 @@ export interface BookCoverTheme {
   frontCoverImageUrl?: string;
   backCoverImageUrl?: string;
   spineImageUrl?: string;
+  /** Optional fractional inset crop [0..0.4] when using mockup-framed cover images */
+  coverCropMargins?: {
+    left: number;
+    top: number;
+    right: number;
+    bottom: number;
+  };
   isPlaceholderArtwork: boolean;
   placeholderLabel: string;
 }
@@ -242,6 +252,234 @@ export const CATEGORIES: CategoryDefinition[] = [
 
 export const BOOKS_CATALOGUE: BookProduct[] = [
   {
+    id: 'story-of-king-david',
+    slug: 'the-story-of-king-david',
+    status: 'published',
+    title: 'The Story of King David',
+    subtitle: 'From Shepherd Boy to King · A Bible Story Coloring Book',
+    author: 'NJ STUDIO · Published on Amazon KDP',
+    categoryId: 'faith-spirituality',
+    categoryLabel: 'Faith & Spirituality',
+    subcategoryId: 'bible-colouring-books',
+    subcategoryLabel: 'Bible Colouring Books',
+    releaseBadge: 'New Arrival',
+    isFeatured: true,
+    shortDescription:
+      'A 51-page illustrated Bible story coloring book following young David from green pastures and harp songs to Goliath and the throne.',
+    editorialDescription:
+      'Newly published on Amazon KDP by NJ STUDIO, The Story of King David — From Shepherd Boy to King brings 51 bold, kid-friendly coloring pages, character introductions, a 6-question story quiz, a Bible memory verse scroll, and a printable completion certificate together in one keepsake volume.',
+    coverTheme: {
+      coverColor: '#76BBE9',
+      spineColor: '#203B30',
+      backColor: '#5BA3D6',
+      textColor: '#F8F4EF',
+      accentColor: '#E5A93B',
+      foilColor: '#F8F4EF',
+      frontCoverImageUrl: '/assets/aistudio/image_f93dc5d6.png',
+      coverCropMargins: {
+        left: 0.148,
+        top: 0.048,
+        right: 0.145,
+        bottom: 0.048,
+      },
+      isPlaceholderArtwork: false,
+      placeholderLabel: 'Published KDP Cover Artwork',
+    },
+    physicalDimensionsRatio: {
+      width: 1.62,
+      height: 1.96,
+      thickness: 0.18,
+    },
+    physicalEdition: {
+      available: true,
+      binding: 'Amazon KDP Paperback · Illustrated Coloring Edition',
+      pageCount: 51,
+      dimensions: '216 × 216 mm (8.5 × 8.5 in)',
+      paperStock: '90 gsm Bright White Coloring Paper',
+      isbn: 'ASIN: B0H4WJYCYJ (KDP)',
+      priceDisplay: '₹377',
+      priceNumeric: 377,
+      marketplaceLabel: 'Buy on Amazon KDP',
+      marketplaceUrl:
+        'https://www.amazon.in/STORY-KING-DAVID-SHEPHERD-BOY-ebook/dp/B0H4WJYCYJ/ref=sr_1_2?crid=5CI895MYVF9H&dib=eyJ2IjoiMSJ9.NzsR_nLenPw9zsGw29RUPUhl3G7ZN_PHCZUV_IGtguWz6_9J1zlgfdzZ5RYP0XNPZpjnMGY7QlEnn8Zv3EAgMMLVmkiyLZBnLxQiToE72l_Wus3lk1Udd-rfmlvXE8RE-dWJtuBnSbQDkQwB58RjGK82Kk_GNiisGoQQEQjYsYfWR0UwUoOoAsKIlWotZW5tfVX8ljLK3padBQqB4szhlOT3h89As6ExS367SCO4WHk.jnGzUk-BaziKpxkR1Nlxf5rarDKPSRK4E6bnPJtJdmo&dib_tag=se&keywords=the+story+of+king+david&qid=1794841991&s=books&sprefix=the+story+of+king+davi%2Cstripbooks%2C380&sr=1-2',
+      fulfillmentNote:
+        'Published on Amazon KDP (India & worldwide). Available directly via your official Amazon listing.',
+    },
+    digitalEdition: {
+      available: true,
+      format: '51-Page Printable PDF Coloring Book',
+      fileSize: '14.2 MB',
+      compatibility: 'Home Print (A4 / Letter), iPad & Tablet Coloring Apps',
+      priceDisplay: '₹129',
+      priceNumeric: 129,
+      marketplaceLabel: 'Request Digital Edition via Form',
+      purchaseUrl:
+        'https://docs.google.com/forms/d/e/1FAIpQLSfX7uOA-AFgEJiuG76SS2PsKqQVHlGCGU4b4eZnRAO82p6R2g/viewform?usp=dialog',
+      sampleNote:
+        'Preview the complete 51-page coloring PDF directly inside the 3D Book Studio.',
+      samplePdfUrl: '/assets/aistudio/THE_STORY_OF_KING_DAVID_8610dd13.pdf',
+    },
+    spreads: [
+      {
+        spreadIndex: 0,
+        label: 'Nameplate & Cast of Characters (p. 2–3)',
+        leftPage: {
+          pageNumber: 2,
+          runningHeader: 'THE STORY OF KING DAVID · NAMEPLATE',
+          heading: 'This Book Belongs To',
+          bodyLines: [
+            'My Name: __________________________',
+            'Date: ____________',
+            '',
+            'Color the young shepherd boy, his wooden',
+            'staff, and two joyful sheep surrounded by',
+            'music notes and wildflowers.',
+          ],
+          illustrationStyle: 'scripture',
+          illustrationCaption: 'Coloring Plate · Page 02',
+        },
+        rightPage: {
+          pageNumber: 3,
+          runningHeader: 'CAST OF CHARACTERS · PAGE 03',
+          heading: 'Meet the People of the Story',
+          bodyLines: [
+            '• David the Shepherd Boy',
+            '• Goliath the Giant Champion',
+            '• King Saul & Prince Jonathan',
+            '• Michal & Abigail',
+            '',
+            'Write each character’s name beneath their',
+            'portrait as you color their robes.',
+          ],
+          illustrationStyle: 'scripture',
+          illustrationCaption: 'Tap Illustration · Inspect 3D Harp, Sling & Crown',
+          interactiveObject: {
+            title: "David's Harp, Shepherd Sling & Royal Crown",
+            subtitle: 'Interactive 3D KDP Story Artifact',
+            description:
+              'Rotate a 3D keepsake uniting young David’s brass-framed harp, leather sling with five smooth stones, and the golden crown of Israel.',
+            proceduralType: 'royal-harp',
+            videoSummary:
+              'Short studio reel: From the quiet fields of Bethlehem to the royal palace in Jerusalem.',
+          },
+        },
+      },
+      {
+        spreadIndex: 1,
+        label: 'Shepherd Boy, Harp & Anointing (p. 7–9)',
+        leftPage: {
+          pageNumber: 7,
+          runningHeader: 'CHAPTER I · BETHLEHEM PASTURES',
+          heading: 'Songs on the Hillside',
+          bodyLines: [
+            'David watched over his father’s flock,',
+            'playing joyful melodies upon his harp',
+            'while butterflies and gentle lambs rested',
+            'beside the meadow rocks.',
+          ],
+          illustrationStyle: 'scripture',
+          illustrationCaption: 'Harp Song Coloring Page · Page 07',
+        },
+        rightPage: {
+          pageNumber: 9,
+          runningHeader: 'CHAPTER II · PROPHET SAMUEL',
+          heading: 'Anointed Future King',
+          bodyLines: [
+            'Samuel poured oil from the horn upon',
+            'young David’s head, blessing the brave',
+            'heart that trusted God even before any',
+            'crown was worn.',
+            '',
+            'Tap below to rotate the 3D Harp & Crown.',
+          ],
+          illustrationStyle: 'scripture',
+          illustrationCaption: 'Tap Illustration · Open 3D Harp & Crown',
+          interactiveObject: {
+            title: "David's Harp, Shepherd Sling & Royal Crown",
+            subtitle: 'Interactive 3D Story Keepsake',
+            description:
+              'Explore the carved harp strings, smooth stones, and golden crown symbolizing David’s journey from shepherd to king.',
+            proceduralType: 'royal-harp',
+            videoSummary:
+              'Short story reel: Samuel anointing David and the courage of faith.',
+          },
+        },
+      },
+      {
+        spreadIndex: 2,
+        label: 'Facing Goliath & Five Smooth Stones (p. 12–14)',
+        leftPage: {
+          pageNumber: 12,
+          runningHeader: 'CHAPTER III · VALLEY OF ELAH',
+          heading: 'Faith Over Fear',
+          bodyLines: [
+            'Standing before the towering armor of',
+            'Goliath, young David held only his wooden',
+            'sling, five smooth river stones, and',
+            'unshakable trust in God.',
+          ],
+          illustrationStyle: 'scripture',
+          illustrationCaption: 'David & Goliath Scene · Page 12',
+        },
+        rightPage: {
+          pageNumber: 14,
+          runningHeader: 'VICTORY IN THE VALLEY · PAGE 14',
+          heading: 'One Smooth Stone',
+          bodyLines: [
+            'With steady courage, the stone flew true',
+            'and the giant’s helmet tumbled to the',
+            'valley floor.',
+            '',
+            'Inspect the 3D Shepherd’s Sling & Stones.',
+          ],
+          illustrationStyle: 'scripture',
+          illustrationCaption: 'Tap Illustration · Open 3D Sling & Stones',
+          interactiveObject: {
+            title: "David's Harp, Shepherd Sling & Royal Crown",
+            subtitle: 'Interactive 3D Story Artifact',
+            description:
+              'Examine the five smooth stones and shepherd’s sling alongside David’s royal crown.',
+            proceduralType: 'royal-harp',
+            videoSummary:
+              'Short coloring reel: Five smooth stones and victory in the Valley of Elah.',
+          },
+        },
+      },
+      {
+        spreadIndex: 3,
+        label: 'Story Quiz, Certificate & Memory Verse (p. 48–50)',
+        leftPage: {
+          pageNumber: 48,
+          runningHeader: 'ACTIVITY · HOW WELL DO YOU KNOW DAVID?',
+          heading: '6-Question Story Quiz',
+          bodyLines: [
+            '1. What instrument did David play?',
+            '2. How many smooth stones did he choose?',
+            '3. Who was David’s big enemy?',
+            '4. Who anointed David as king?',
+            '5. Which city became his capital?',
+          ],
+          illustrationStyle: 'scripture',
+          illustrationCaption: 'Quiz & Favorite Part Reflection · Page 48',
+        },
+        rightPage: {
+          pageNumber: 49,
+          runningHeader: 'COMPLETION CERTIFICATE · PAGE 49–50',
+          heading: 'King David Story Certificate',
+          bodyLines: [
+            'Awarded upon completing all 51 pages',
+            'of The Story of King David Coloring Book.',
+            '',
+            'Includes My Bible Memory Verse Scroll:',
+            '“Read it. Say it. Remember it!” (p. 50)',
+          ],
+          illustrationStyle: 'scripture',
+          illustrationCaption: 'Certificate & Memory Verse Scroll · p. 49–50',
+        },
+      },
+    ],
+  },
+  {
     id: 'little-space-thoughts',
     slug: 'a-little-space-for-your-thoughts',
     status: 'published',
@@ -281,8 +519,8 @@ export const BOOKS_CATALOGUE: BookProduct[] = [
       dimensions: '148 × 210 mm (A5)',
       paperStock: '120 gsm Munken Pure Ivory',
       isbn: '978-1-998412-01-4',
-      priceDisplay: '$28.00',
-      priceNumeric: 28,
+      priceDisplay: '₹299',
+      priceNumeric: 299,
       marketplaceLabel: 'Purchase via External Print Partner',
       marketplaceUrl: 'https://bookshop.org',
       fulfillmentNote:
@@ -293,8 +531,8 @@ export const BOOKS_CATALOGUE: BookProduct[] = [
       format: 'Interactive Hyperlinked PDF (GoodNotes & Print Ready)',
       fileSize: '18.4 MB',
       compatibility: 'iPad, Kindle Scribe, reMarkable, Desktop & A5 Home Print',
-      priceDisplay: '$14.00',
-      priceNumeric: 14,
+      priceDisplay: '₹149',
+      priceNumeric: 149,
       marketplaceLabel: 'Purchase Digital PDF Edition',
       purchaseUrl: 'https://gumroad.com',
       sampleNote: 'Includes interactive 3D preview spread and printable prompt template.',
@@ -454,8 +692,8 @@ export const BOOKS_CATALOGUE: BookProduct[] = [
       dimensions: '165 × 225 mm',
       paperStock: '140 gsm Uncoated Archival Paper',
       isbn: '978-1-998412-04-5',
-      priceDisplay: '$32.00',
-      priceNumeric: 32,
+      priceDisplay: '₹349',
+      priceNumeric: 349,
       marketplaceLabel: 'Purchase via External Print Partner',
       marketplaceUrl: 'https://bookshop.org',
       fulfillmentNote:
@@ -466,8 +704,8 @@ export const BOOKS_CATALOGUE: BookProduct[] = [
       format: 'Interactive Puzzle PDF + Printable Cipher Sheets',
       fileSize: '26.2 MB',
       compatibility: 'Desktop, Tablet & Printable A4/Letter Kit',
-      priceDisplay: '$16.00',
-      priceNumeric: 16,
+      priceDisplay: '₹169',
+      priceNumeric: 169,
       marketplaceLabel: 'Purchase Digital Puzzle Pack',
       purchaseUrl: 'https://gumroad.com',
       sampleNote: 'Includes interactive cipher wheel and clue archive.',
@@ -592,8 +830,8 @@ export const BOOKS_CATALOGUE: BookProduct[] = [
       dimensions: '190 × 245 mm',
       paperStock: '150 gsm Warm Cream Art Paper',
       isbn: '978-1-998412-07-6',
-      priceDisplay: '$30.00',
-      priceNumeric: 30,
+      priceDisplay: '₹329',
+      priceNumeric: 329,
       marketplaceLabel: 'Purchase via External Print Partner',
       marketplaceUrl: 'https://bookshop.org',
       fulfillmentNote:
@@ -604,8 +842,8 @@ export const BOOKS_CATALOGUE: BookProduct[] = [
       format: 'Illustrated Digital Edition + Printable Activity Pages',
       fileSize: '31.5 MB',
       compatibility: 'iPad, Desktop PDF & Home Colouring Sheets',
-      priceDisplay: '$15.00',
-      priceNumeric: 15,
+      priceDisplay: '₹149',
+      priceNumeric: 149,
       marketplaceLabel: 'Purchase Digital Activity Edition',
       purchaseUrl: 'https://gumroad.com',
       sampleNote: 'Includes printable colouring plates and family discussion cards.',
@@ -732,8 +970,8 @@ export const BOOKS_CATALOGUE: BookProduct[] = [
       dimensions: '155 × 215 mm',
       paperStock: '130 gsm Natural Cotton Blend',
       isbn: '978-1-998412-09-0',
-      priceDisplay: '$29.00',
-      priceNumeric: 29,
+      priceDisplay: '₹299',
+      priceNumeric: 299,
       marketplaceLabel: 'Purchase via External Print Partner',
       marketplaceUrl: 'https://bookshop.org',
       fulfillmentNote:
@@ -744,8 +982,8 @@ export const BOOKS_CATALOGUE: BookProduct[] = [
       format: 'Illustrated PDF + Printable Herbarium Cards',
       fileSize: '22.0 MB',
       compatibility: 'Tablet, E-Reader & Desktop',
-      priceDisplay: '$14.50',
-      priceNumeric: 14.5,
+      priceDisplay: '₹129',
+      priceNumeric: 129,
       marketplaceLabel: 'Purchase Digital Almanac',
       purchaseUrl: 'https://gumroad.com',
       sampleNote: 'Includes seasonal field note sheets for home printing.',
@@ -827,8 +1065,8 @@ export const BOOKS_CATALOGUE: BookProduct[] = [
       dimensions: '148 × 210 mm (A5)',
       paperStock: '120 gsm Cream Archival',
       isbn: '978-1-998412-11-3',
-      priceDisplay: '$26.00',
-      priceNumeric: 26,
+      priceDisplay: '₹249',
+      priceNumeric: 249,
       marketplaceLabel: 'Purchase via External Print Partner',
       marketplaceUrl: 'https://bookshop.org',
       fulfillmentNote:
@@ -839,8 +1077,8 @@ export const BOOKS_CATALOGUE: BookProduct[] = [
       format: 'Hyperlinked GoodNotes & Printable PDF',
       fileSize: '15.8 MB',
       compatibility: 'iPad, Tablet & Printable A5',
-      priceDisplay: '$12.00',
-      priceNumeric: 12,
+      priceDisplay: '₹99',
+      priceNumeric: 99,
       marketplaceLabel: 'Purchase Digital Prayer Journal',
       purchaseUrl: 'https://gumroad.com',
       sampleNote: 'Includes 90 hyperlinked daily prayer tabs.',
@@ -923,8 +1161,8 @@ export const BOOKS_CATALOGUE: BookProduct[] = [
       dimensions: '152 × 220 mm',
       paperStock: '135 gsm Warm Ivory Book Paper',
       isbn: '978-1-998412-14-4',
-      priceDisplay: '$31.00',
-      priceNumeric: 31,
+      priceDisplay: '₹339',
+      priceNumeric: 339,
       marketplaceLabel: 'Purchase via External Print Partner',
       marketplaceUrl: 'https://bookshop.org',
       fulfillmentNote:
@@ -935,8 +1173,8 @@ export const BOOKS_CATALOGUE: BookProduct[] = [
       format: 'Illustrated ePub & High-Res PDF',
       fileSize: '24.5 MB',
       compatibility: 'Apple Books, Kindle, Tablet & Desktop',
-      priceDisplay: '$15.00',
-      priceNumeric: 15,
+      priceDisplay: '₹149',
+      priceNumeric: 149,
       marketplaceLabel: 'Purchase Digital Story Edition',
       purchaseUrl: 'https://gumroad.com',
       sampleNote: 'Includes high-resolution chapter frontispieces.',

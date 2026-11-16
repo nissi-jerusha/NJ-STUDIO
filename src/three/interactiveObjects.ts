@@ -386,6 +386,109 @@ export function buildProceduralInteractiveObject(
     ribbon.rotation.y = 0.35;
     ribbon.position.set(0.14, 0.14, 0.12);
     root.add(ribbon);
+  } else if (type === 'royal-harp') {
+    // 1. Studio walnut pedestal
+    const plinth = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.46, 0.52, 0.08, 32),
+      walnutMat
+    );
+    plinth.position.y = 0.04;
+    root.add(plinth);
+
+    // 2. Shepherd's golden-oak Harp frame
+    const harpGroup = new THREE.Group();
+    harpGroup.position.set(-0.1, 0.08, 0);
+
+    const harpBase = new THREE.Mesh(
+      new THREE.BoxGeometry(0.32, 0.06, 0.09),
+      cedarMat
+    );
+    harpBase.position.y = 0.03;
+    harpGroup.add(harpBase);
+
+    const harpPillar = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.025, 0.03, 0.62, 16),
+      brassMat
+    );
+    harpPillar.position.set(-0.13, 0.34, 0);
+    harpPillar.rotation.z = 0.1;
+    harpGroup.add(harpPillar);
+
+    const soundboard = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.032, 0.048, 0.54, 16),
+      cedarMat
+    );
+    soundboard.position.set(0.12, 0.28, 0);
+    soundboard.rotation.z = 0.32;
+    harpGroup.add(soundboard);
+
+    const neckCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-0.16, 0.64, 0),
+      new THREE.Vector3(-0.02, 0.72, 0),
+      new THREE.Vector3(0.18, 0.55, 0),
+    ]);
+    const neckMesh = new THREE.Mesh(
+      new THREE.TubeGeometry(neckCurve, 18, 0.024, 10, false),
+      brassMat
+    );
+    harpGroup.add(neckMesh);
+
+    // Harp strings (5 brass strings)
+    for (let s = 0; s < 5; s++) {
+      const sx = -0.09 + s * 0.045;
+      const sh = 0.56 - s * 0.035;
+      const strMesh = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.005, 0.005, sh, 8),
+        brassMat
+      );
+      strMesh.position.set(sx, 0.08 + sh / 2, 0);
+      harpGroup.add(strMesh);
+    }
+    root.add(harpGroup);
+
+    // 3. Royal Crown resting beside harp
+    const crownGroup = new THREE.Group();
+    crownGroup.position.set(0.22, 0.14, 0.14);
+    const crownBand = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.13, 0.11, 0.09, 24, 1, true),
+      brassMat
+    );
+    crownBand.material = brassMat.clone();
+    crownBand.material.side = THREE.DoubleSide;
+    crownGroup.add(crownBand);
+    for (let p = 0; p < 5; p++) {
+      const ang = (p / 5) * Math.PI * 2;
+      const point = new THREE.Mesh(
+        new THREE.ConeGeometry(0.028, 0.075, 4),
+        brassMat
+      );
+      point.position.set(Math.cos(ang) * 0.12, 0.075, Math.sin(ang) * 0.12);
+      crownGroup.add(point);
+    }
+    root.add(crownGroup);
+
+    // 4. Five Smooth River Stones
+    const stoneMat = new THREE.MeshStandardMaterial({
+      color: 0x8f8a82,
+      roughness: 0.48,
+      metalness: 0.06,
+    });
+    const stoneOffsets = [
+      [-0.26, 0.11, 0.22],
+      [-0.18, 0.11, 0.26],
+      [-0.1, 0.11, 0.23],
+      [-0.22, 0.11, 0.15],
+      [-0.14, 0.15, 0.21],
+    ];
+    for (const [sx, sy, sz] of stoneOffsets) {
+      const stone = new THREE.Mesh(
+        new THREE.SphereGeometry(0.038, 14, 14),
+        stoneMat
+      );
+      stone.scale.set(1.25, 0.72, 1.0);
+      stone.position.set(sx, sy, sz);
+      root.add(stone);
+    }
   } else {
     // origami-crane
     const plinth = new THREE.Mesh(

@@ -167,7 +167,9 @@ export const FeaturedBooksSection: React.FC<FeaturedBooksSectionProps> = ({
                           src={book.coverTheme.frontCoverImageUrl}
                           alt={`${book.title} cover`}
                           referrerPolicy="no-referrer"
-                          className="absolute inset-0 w-full h-full object-cover"
+                          className={`absolute inset-0 w-full h-full object-cover ${
+                            book.coverTheme.coverCropMargins ? 'scale-[1.36]' : ''
+                          }`}
                         />
                       ) : (
                         <>

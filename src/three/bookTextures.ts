@@ -219,7 +219,16 @@ export function createFrontCoverTexture(
     img.crossOrigin = 'anonymous';
     img.onload = () => {
       if (ctx) {
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const crop = book.coverTheme.coverCropMargins;
+        if (crop) {
+          const sx = img.naturalWidth * crop.left;
+          const sy = img.naturalHeight * crop.top;
+          const sw = img.naturalWidth * (1 - crop.left - crop.right);
+          const sh = img.naturalHeight * (1 - crop.top - crop.bottom);
+          ctx.drawImage(img, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+        } else {
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        }
         texture.needsUpdate = true;
       }
     };

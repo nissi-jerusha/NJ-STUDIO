@@ -38,7 +38,7 @@ export const Hero3DScene: React.FC<Hero3DSceneProps> = ({
     PUBLISHED_BOOKS.find((b) => b.id === 'noahs-ark-journey-of-faith') ||
     PUBLISHED_BOOKS[2];
   const fourthBookData =
-    PUBLISHED_BOOKS.find((b) => b.id === 'quiet-morning-prayer-journal') ||
+    PUBLISHED_BOOKS.find((b) => b.id === 'story-of-king-david') ||
     PUBLISHED_BOOKS[0];
 
   const [isBookOpen, setIsBookOpen] = useState(false);
