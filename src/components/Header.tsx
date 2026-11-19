@@ -8,6 +8,7 @@ interface HeaderProps {
   onOpenSearch: () => void;
   onOpenAccount: () => void;
   onOpenBag: () => void;
+  onOpenPdfStudio: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -17,6 +18,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenSearch,
   onOpenAccount,
   onOpenBag,
+  onOpenPdfStudio,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -77,6 +79,16 @@ export const Header: React.FC<HeaderProps> = ({
               {item.label}
             </button>
           ))}
+          <button
+            type="button"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              onOpenPdfStudio();
+            }}
+            className="text-[13px] font-semibold text-[#203B30] hover:text-[#765A4A] relative py-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-[#203B30] hover:after:w-full after:transition-all after:duration-200"
+          >
+            PDF Studio
+          </button>
         </nav>
 
         {/* Utility Action Icons */}
@@ -140,11 +152,21 @@ export const Header: React.FC<HeaderProps> = ({
               key={item.label}
               type="button"
               onClick={() => handleLinkClick(item.target, item.preset)}
-              className="text-left py-2.5 text-sm font-medium text-[#2C221E] hover:text-[#203B30] border-b border-[#765A4A]/10 last:border-b-0 cursor-pointer"
+              className="text-left py-2.5 text-sm font-medium text-[#2C221E] hover:text-[#203B30] border-b border-[#765A4A]/10 cursor-pointer"
             >
               {item.label}
             </button>
           ))}
+          <button
+            type="button"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              onOpenPdfStudio();
+            }}
+            className="text-left py-2.5 text-sm font-semibold text-[#203B30] hover:text-[#765A4A] cursor-pointer"
+          >
+            PDF Studio (Print Inspector)
+          </button>
         </nav>
       )}
     </header>

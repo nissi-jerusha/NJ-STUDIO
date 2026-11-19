@@ -294,7 +294,7 @@ export const BOOKS_CATALOGUE: BookProduct[] = [
       available: true,
       binding: 'Amazon KDP Paperback · Illustrated Coloring Edition',
       pageCount: 51,
-      dimensions: '216 × 216 mm (8.5 × 8.5 in)',
+      dimensions: '216 × 216 mm (8.5 × 8.5 in Trim · 8.625 × 8.75 in Bleed)',
       paperStock: '90 gsm Bright White Coloring Paper',
       isbn: 'ASIN: B0H4WJYCYJ (KDP)',
       priceDisplay: '₹377',
@@ -308,15 +308,15 @@ export const BOOKS_CATALOGUE: BookProduct[] = [
     digitalEdition: {
       available: true,
       format: '51-Page Printable PDF Coloring Book',
-      fileSize: '14.2 MB',
+      fileSize: '30.6 MB',
       compatibility: 'Home Print (A4 / Letter), iPad & Tablet Coloring Apps',
-      priceDisplay: '₹129',
-      priceNumeric: 129,
+      priceDisplay: '₹377',
+      priceNumeric: 377,
       marketplaceLabel: 'Request Digital Edition via Form',
       purchaseUrl:
         'https://docs.google.com/forms/d/e/1FAIpQLSfX7uOA-AFgEJiuG76SS2PsKqQVHlGCGU4b4eZnRAO82p6R2g/viewform?usp=dialog',
       sampleNote:
-        'Preview the complete 51-page coloring PDF directly inside the 3D Book Studio.',
+        'Preview all 51 full-resolution pages with margin, bleed, and safe-area guides inside the PDF Print Studio.',
       samplePdfUrl: '/assets/aistudio/THE_STORY_OF_KING_DAVID_8610dd13.pdf',
     },
     spreads: [

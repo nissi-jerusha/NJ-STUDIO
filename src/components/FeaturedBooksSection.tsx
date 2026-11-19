@@ -1,5 +1,5 @@
-import React from 'react';
-import { BookOpen, Eye, ShoppingBag } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { BookOpen, Eye, FileCheck2, ShoppingBag } from 'lucide-react';
 import {
   PUBLISHED_BOOKS,
   type BookProduct,
@@ -14,7 +14,58 @@ interface FeaturedBooksSectionProps {
   onResetCategory: () => void;
   onSelectBook: (book: BookProduct) => void;
   onAddToBag: (book: BookProduct, format: 'physical' | 'digital') => void;
+  onOpenPdfStudio?: (book?: BookProduct) => void;
 }
+
+const CoverArtworkFrame: React.FC<{ book: BookProduct }> = ({ book }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const srcUrl = book.coverTheme.frontCoverImageUrl;
+    const canvas = canvasRef.current;
+    if (!srcUrl || !canvas) return;
+
+    let cancelled = false;
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      if (cancelled) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.fillStyle = book.coverTheme.coverColor;
+      ctx.fillRect(0, 0, w, h);
+
+      const crop = book.coverTheme.coverCropMargins;
+      const sx = crop ? img.naturalWidth * crop.left : 0;
+      const sy = crop ? img.naturalHeight * crop.top : 0;
+      const sw = crop ? img.naturalWidth * (1 - crop.left - crop.right) : img.naturalWidth;
+      const sh = crop ? img.naturalHeight * (1 - crop.top - crop.bottom) : img.naturalHeight;
+
+      const scale = Math.min(w / sw, h / sh);
+      const dw = sw * scale;
+      const dh = sh * scale;
+      const dx = (w - dw) / 2;
+      const dy = (h - dh) / 2;
+      ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
+    };
+    img.src = srcUrl;
+    return () => {
+      cancelled = true;
+    };
+  }, [book]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      width={300}
+      height={412}
+      aria-label={`${book.title} cover`}
+      className="absolute inset-0 w-full h-full block"
+    />
+  );
+};
 
 export const FeaturedBooksSection: React.FC<FeaturedBooksSectionProps> = ({
   selectedCategoryId,
@@ -24,6 +75,7 @@ export const FeaturedBooksSection: React.FC<FeaturedBooksSectionProps> = ({
   onResetCategory,
   onSelectBook,
   onAddToBag,
+  onOpenPdfStudio,
 }) => {
   const books = PUBLISHED_BOOKS.filter((b) => {
     if (selectedCategoryId !== 'all' && b.categoryId !== selectedCategoryId) {
@@ -56,27 +108,40 @@ export const FeaturedBooksSection: React.FC<FeaturedBooksSectionProps> = ({
             Hover any edition to inspect details, or open a volume to explore its 3D cover, turning pages, and interactive artifacts.
           </p>
 
-          <div className="mt-6 inline-flex flex-wrap items-center justify-center gap-1 p-1 rounded-md bg-[#EFE8DE] border border-[#765A4A]/15">
-            {(
-              [
-                { id: 'all', label: 'All Releases' },
-                { id: 'bestsellers', label: 'Best Sellers' },
-                { id: 'new', label: 'New Arrivals' },
-              ] as const
-            ).map((tab) => (
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <div className="inline-flex flex-wrap items-center justify-center gap-1 p-1 rounded-md bg-[#EFE8DE] border border-[#765A4A]/15">
+              {(
+                [
+                  { id: 'all', label: 'All Releases' },
+                  { id: 'bestsellers', label: 'Best Sellers' },
+                  { id: 'new', label: 'New Arrivals' },
+                ] as const
+              ).map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => onChangeFilterTab(tab.id)}
+                  className={`px-4 py-1.5 rounded-sm text-xs font-medium transition-colors cursor-pointer whitespace-nowrap ${
+                    filterTab === tab.id
+                      ? 'bg-[#F8F4EF] text-[#203B30] shadow-xs'
+                      : 'text-[#765A4A] hover:text-[#203B30]'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {onOpenPdfStudio && (
               <button
-                key={tab.id}
                 type="button"
-                onClick={() => onChangeFilterTab(tab.id)}
-                className={`px-4 py-1.5 rounded-sm text-xs font-medium transition-colors cursor-pointer whitespace-nowrap ${
-                  filterTab === tab.id
-                    ? 'bg-[#F8F4EF] text-[#203B30] shadow-xs'
-                    : 'text-[#765A4A] hover:text-[#203B30]'
-                }`}
+                onClick={() => onOpenPdfStudio()}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#203B30] hover:bg-[#2C221E] text-[#F8F4EF] text-xs font-medium transition-colors cursor-pointer whitespace-nowrap"
               >
-                {tab.label}
+                <FileCheck2 className="w-3.5 h-3.5" />
+                <span>PDF Upload & Print Inspector</span>
               </button>
-            ))}
+            )}
           </div>
 
           {(selectedCategoryId !== 'all' || selectedSubcategoryId !== 'all') && (
@@ -163,14 +228,7 @@ export const FeaturedBooksSection: React.FC<FeaturedBooksSectionProps> = ({
                       }}
                     >
                       {book.coverTheme.frontCoverImageUrl ? (
-                        <img
-                          src={book.coverTheme.frontCoverImageUrl}
-                          alt={`${book.title} cover`}
-                          referrerPolicy="no-referrer"
-                          className={`absolute inset-0 w-full h-full object-cover ${
-                            book.coverTheme.coverCropMargins ? 'scale-[1.36]' : ''
-                          }`}
-                        />
+                        <CoverArtworkFrame book={book} />
                       ) : (
                         <>
                           <div className="relative z-10 flex flex-col items-center">
@@ -244,14 +302,30 @@ export const FeaturedBooksSection: React.FC<FeaturedBooksSectionProps> = ({
                   <div className="mt-4 pt-3 border-t border-[#765A4A]/15 flex items-center justify-between gap-2">
                     <div className="text-left">
                       <div className="text-[11px] text-[#765A4A]">
-                        Physical / Digital
+                        Selling Price
                       </div>
-                      <div className="text-xs font-semibold text-[#203B30] tabular-nums">
-                        {book.physicalEdition.priceDisplay} · {book.digitalEdition.priceDisplay}
+                      <div className="text-sm font-semibold text-[#203B30] tabular-nums">
+                        {book.physicalEdition.priceDisplay}
+                        {book.digitalEdition.priceNumeric !== book.physicalEdition.priceNumeric && (
+                          <span className="ml-1.5 text-[11px] font-normal text-[#765A4A]">
+                            / PDF {book.digitalEdition.priceDisplay}
+                          </span>
+                        )}
                       </div>
                     </div>
 
                     <div className="flex items-center gap-1.5">
+                      {book.digitalEdition.samplePdfUrl && onOpenPdfStudio && (
+                        <button
+                          type="button"
+                          onClick={() => onOpenPdfStudio(book)}
+                          aria-label={`Inspect PDF layout for ${book.title}`}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-sm bg-[#E7C2C0]/55 hover:bg-[#E7C2C0] text-[#203B30] text-[11px] font-medium transition-colors cursor-pointer whitespace-nowrap"
+                        >
+                          <FileCheck2 className="w-3 h-3" />
+                          <span>PDF</span>
+                        </button>
+                      )}
                       <button
                         type="button"
                         onClick={() => onSelectBook(book)}
@@ -262,7 +336,7 @@ export const FeaturedBooksSection: React.FC<FeaturedBooksSectionProps> = ({
                       </button>
                       <button
                         type="button"
-                        onClick={() => onAddToBag(book, 'digital')}
+                        onClick={() => onAddToBag(book, 'physical')}
                         aria-label={`Add ${book.title} to bag`}
                         className="p-1.5 rounded-sm border border-[#765A4A]/25 hover:bg-[#E7C2C0]/50 text-[#2C221E] transition-colors cursor-pointer"
                       >

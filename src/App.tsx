@@ -13,8 +13,9 @@ import { FeaturedBooksSection } from './components/FeaturedBooksSection';
 import { Footer, type FooterInfoModalType } from './components/Footer';
 import { Header } from './components/Header';
 import { Hero3DScene } from './components/Hero3DScene';
+import { PdfPrintStudioModal } from './components/PdfPrintStudioModal';
 import { PromoBanner3D } from './components/PromoBanner3D';
-import type { BookProduct, PrimaryCategoryId } from './data/catalogue';
+import { PUBLISHED_BOOKS, type BookProduct, type PrimaryCategoryId } from './data/catalogue';
 
 export function App() {
   const [selectedBook, setSelectedBook] = useState<BookProduct | null>(null);
@@ -26,6 +27,13 @@ export function App() {
   const [accountOpen, setAccountOpen] = useState(false);
   const [bagOpen, setBagOpen] = useState(false);
   const [infoModal, setInfoModal] = useState<FooterInfoModalType>(null);
+  const [pdfStudioState, setPdfStudioState] = useState<{
+    open: boolean;
+    pdfUrl?: string;
+    fileName?: string;
+    bookTitle?: string;
+    sellingPriceDisplay?: string;
+  }>({ open: false });
 
   const [savedBookIds, setSavedBookIds] = useState<string[]>(() => {
     try {
@@ -82,6 +90,22 @@ export function App() {
     setBagItems((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleOpenPdfStudio = (book?: BookProduct) => {
+    const targetBook =
+      book ||
+      PUBLISHED_BOOKS.find((b) => b.id === 'story-of-king-david') ||
+      PUBLISHED_BOOKS[0];
+    setPdfStudioState({
+      open: true,
+      pdfUrl: targetBook.digitalEdition.samplePdfUrl || '/assets/aistudio/THE_STORY_OF_KING_DAVID_8610dd13.pdf',
+      fileName: targetBook.id === 'story-of-king-david'
+        ? 'THE_STORY_OF_KING_DAVID.pdf'
+        : `${targetBook.slug}.pdf`,
+      bookTitle: targetBook.title,
+      sellingPriceDisplay: targetBook.physicalEdition.priceDisplay,
+    });
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-[#F8F4EF] text-[#2C221E]">
       <Header
@@ -91,6 +115,7 @@ export function App() {
         onOpenSearch={() => setSearchOpen(true)}
         onOpenAccount={() => setAccountOpen(true)}
         onOpenBag={() => setBagOpen(true)}
+        onOpenPdfStudio={() => handleOpenPdfStudio()}
       />
 
       <main className="flex-1">
@@ -115,6 +140,7 @@ export function App() {
           onResetCategory={() => handleSelectCategory('all', 'all')}
           onSelectBook={(book) => setSelectedBook(book)}
           onAddToBag={handleAddToBag}
+          onOpenPdfStudio={handleOpenPdfStudio}
         />
 
         <PromoBanner3D
@@ -144,6 +170,17 @@ export function App() {
         onAddToBag={handleAddToBag}
         isSaved={selectedBook ? savedBookIds.includes(selectedBook.id) : false}
         onToggleSave={handleToggleSave}
+        onOpenPdfStudio={handleOpenPdfStudio}
+      />
+
+      {/* Print-Quality PDF Upload, Preview, Margin Validation & Export Studio */}
+      <PdfPrintStudioModal
+        open={pdfStudioState.open}
+        onClose={() => setPdfStudioState((prev) => ({ ...prev, open: false }))}
+        initialPdfUrl={pdfStudioState.pdfUrl}
+        initialFileName={pdfStudioState.fileName}
+        bookTitle={pdfStudioState.bookTitle}
+        sellingPriceDisplay={pdfStudioState.sellingPriceDisplay}
       />
 
       {/* Search, Account & Bag Overlays */}

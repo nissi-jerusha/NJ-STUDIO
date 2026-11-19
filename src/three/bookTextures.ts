@@ -213,22 +213,27 @@ export function createFrontCoverTexture(
   texture.anisotropy = maxAnisotropy;
   texture.needsUpdate = true;
 
-  // If custom cover image path is supplied, load and overlay seamlessly
+  // If custom cover image path is supplied, load and overlay preserving aspect ratio
   if (book.coverTheme.frontCoverImageUrl) {
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => {
       if (ctx) {
+        ctx.fillStyle = book.coverTheme.coverColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
         const crop = book.coverTheme.coverCropMargins;
-        if (crop) {
-          const sx = img.naturalWidth * crop.left;
-          const sy = img.naturalHeight * crop.top;
-          const sw = img.naturalWidth * (1 - crop.left - crop.right);
-          const sh = img.naturalHeight * (1 - crop.top - crop.bottom);
-          ctx.drawImage(img, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
-        } else {
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        }
+        const sx = crop ? img.naturalWidth * crop.left : 0;
+        const sy = crop ? img.naturalHeight * crop.top : 0;
+        const sw = crop ? img.naturalWidth * (1 - crop.left - crop.right) : img.naturalWidth;
+        const sh = crop ? img.naturalHeight * (1 - crop.top - crop.bottom) : img.naturalHeight;
+
+        const scale = Math.min(canvas.width / sw, canvas.height / sh);
+        const dw = sw * scale;
+        const dh = sh * scale;
+        const dx = (canvas.width - dw) / 2;
+        const dy = (canvas.height - dh) / 2;
+        ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
         texture.needsUpdate = true;
       }
     };

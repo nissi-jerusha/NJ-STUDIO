@@ -41,6 +41,7 @@ interface Book3DModalProps {
   onAddToBag: (book: BookProduct, format: 'physical' | 'digital') => void;
   isSaved: boolean;
   onToggleSave: (bookId: string) => void;
+  onOpenPdfStudio?: (book: BookProduct) => void;
 }
 
 type CameraViewPreset = 'front' | 'spine' | 'back' | 'open';
@@ -51,6 +52,7 @@ export const Book3DModal: React.FC<Book3DModalProps> = ({
   onAddToBag,
   isSaved,
   onToggleSave,
+  onOpenPdfStudio,
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const videoCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -60,7 +62,6 @@ export const Book3DModal: React.FC<Book3DModalProps> = ({
   const [selectedEdition, setSelectedEdition] = useState<'physical' | 'digital'>('physical');
   const [activeObjectMode, setActiveObjectMode] = useState<boolean>(false);
   const [showVideoModal, setShowVideoModal] = useState<boolean>(false);
-  const [showPdfModal, setShowPdfModal] = useState<boolean>(false);
   const [videoPlaying, setVideoPlaying] = useState<boolean>(true);
   const [dockCollapsed, setDockCollapsed] = useState<boolean>(false);
   const [hotspotHovered, setHotspotHovered] = useState<boolean>(false);
@@ -94,7 +95,6 @@ export const Book3DModal: React.FC<Book3DModalProps> = ({
     setSpreadIndex(0);
     setActiveObjectMode(false);
     setShowVideoModal(false);
-    setShowPdfModal(false);
     setSelectedEdition('physical');
     openStateRef.current.value = 0;
   }, [book?.id]);
@@ -104,9 +104,7 @@ export const Book3DModal: React.FC<Book3DModalProps> = ({
     if (!book) return;
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        if (showPdfModal) {
-          setShowPdfModal(false);
-        } else if (showVideoModal) {
+        if (showVideoModal) {
           setShowVideoModal(false);
         } else if (activeObjectMode) {
           setActiveObjectMode(false);
@@ -117,7 +115,7 @@ export const Book3DModal: React.FC<Book3DModalProps> = ({
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [book, showPdfModal, showVideoModal, activeObjectMode, onClose]);
+  }, [book, showVideoModal, activeObjectMode, onClose]);
 
   const currentSpread = book?.spreads[spreadIndex];
   const interactiveObjectConfig = currentSpread?.rightPage.interactiveObject;
@@ -834,11 +832,21 @@ export const Book3DModal: React.FC<Book3DModalProps> = ({
             </button>
           </div>
 
-          {/* Title & Synopsis */}
+          {/* Title, Selling Price & Synopsis */}
           <div>
-            <h2 className="font-serif text-3xl font-semibold text-[#203B30] leading-tight">
-              {book.title}
-            </h2>
+            <div className="flex items-start justify-between gap-3">
+              <h2 className="font-serif text-3xl font-semibold text-[#203B30] leading-tight">
+                {book.title}
+              </h2>
+              <div className="text-right shrink-0 pt-1">
+                <div className="text-[10px] uppercase tracking-wider text-[#765A4A]">
+                  Selling Price
+                </div>
+                <div className="font-serif text-2xl font-semibold text-[#203B30] tabular-nums">
+                  {book.physicalEdition.priceDisplay}
+                </div>
+              </div>
+            </div>
             <p className="font-serif italic text-base text-[#765A4A] mt-0.5">
               {book.subtitle} · {book.author}
             </p>
@@ -885,14 +893,14 @@ export const Book3DModal: React.FC<Book3DModalProps> = ({
               })}
             </div>
 
-            {book.digitalEdition.samplePdfUrl && (
+            {book.digitalEdition.samplePdfUrl && onOpenPdfStudio && (
               <button
                 type="button"
-                onClick={() => setShowPdfModal(true)}
+                onClick={() => onOpenPdfStudio(book)}
                 className="mt-2.5 w-full inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-sm bg-[#E7C2C0]/55 hover:bg-[#E7C2C0] text-[#203B30] border border-[#765A4A]/20 text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap"
               >
                 <FileText className="w-3.5 h-3.5" />
-                <span>Preview {book.physicalEdition.pageCount}-Page PDF Book</span>
+                <span>Inspect & Export {book.physicalEdition.pageCount}-Page Print PDF</span>
               </button>
             )}
 
@@ -1058,14 +1066,14 @@ export const Book3DModal: React.FC<Book3DModalProps> = ({
                     <span>{book.digitalEdition.marketplaceLabel}</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
-                  {book.digitalEdition.samplePdfUrl ? (
+                  {book.digitalEdition.samplePdfUrl && onOpenPdfStudio ? (
                     <button
                       type="button"
-                      onClick={() => setShowPdfModal(true)}
+                      onClick={() => onOpenPdfStudio(book)}
                       className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-sm bg-[#EFE8DE] hover:bg-[#E7C2C0]/60 text-[#2C221E] text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap"
                     >
                       <FileText className="w-3.5 h-3.5" />
-                      <span>Preview {book.physicalEdition.pageCount}-Page PDF</span>
+                      <span>PDF Print Studio</span>
                     </button>
                   ) : (
                     <button
@@ -1142,50 +1150,6 @@ export const Book3DModal: React.FC<Book3DModalProps> = ({
                   </button>
                 </div>
               )}
-            </div>
-          </div>
-        )}
-
-        {/* Nested Full PDF Book Reader Overlay */}
-        {showPdfModal && book.digitalEdition.samplePdfUrl && (
-          <div className="absolute inset-0 z-50 bg-[#1B1410]/95 flex flex-col items-center justify-center p-4 sm:p-6">
-            <div className="w-full max-w-4xl h-full max-h-[780px] bg-[#F8F4EF] border border-[#765A4A]/25 rounded-lg overflow-hidden shadow-2xl flex flex-col">
-              <div className="flex items-center justify-between gap-3 px-5 py-3 bg-[#203B30] text-[#F8F4EF]">
-                <div className="min-w-0">
-                  <div className="text-sm font-medium truncate">
-                    {book.title} · {book.physicalEdition.pageCount}-Page PDF Preview
-                  </div>
-                  <div className="text-[11px] text-[#E7C2C0] truncate">
-                    {book.subtitle}
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <a
-                    href={book.digitalEdition.samplePdfUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-[#F8F4EF]/15 hover:bg-[#F8F4EF]/25 text-[#F8F4EF] text-xs font-medium transition-colors whitespace-nowrap"
-                  >
-                    <span>Open PDF</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                  <button
-                    type="button"
-                    onClick={() => setShowPdfModal(false)}
-                    aria-label="Close PDF preview"
-                    className="p-1.5 rounded-full hover:bg-[#F8F4EF]/15 text-[#F8F4EF] cursor-pointer"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-              <div className="flex-1 bg-[#EAE3D9]">
-                <iframe
-                  src={book.digitalEdition.samplePdfUrl}
-                  title={`${book.title} PDF Preview`}
-                  className="w-full h-full border-0 bg-white"
-                />
-              </div>
             </div>
           </div>
         )}
